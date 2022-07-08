@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import UnloginPage from "./components/unloginPage/UnloginPage";
 import UserForm from "./components/userForm/UserForm";
 import Game from "./components//game/Game";
@@ -33,18 +33,6 @@ class App extends Component {
         access_token: localStorage.getItem("access_token"),
       });
     }
-    if (
-      window.location.href === "http://localhost:3000/" &&
-      localStorage.getItem("isUserLogin")
-    ) {
-      window.location.assign("http://localhost:3000/Game");
-    }
-    if (
-      window.location.href === "http://localhost:3000/" &&
-      !localStorage.getItem("isUserLogin")
-    ) {
-      window.location.assign("http://localhost:3000/Unlogin");
-    }
   }
   render() {
     return (
@@ -56,12 +44,20 @@ class App extends Component {
               <Route path="/Form" element={<UserForm login={this.login} />} />
             </React.Fragment>
           ) : (
-            <Route
-              path="/Game"
-              element={
-                <Game token={this.state.access_token} logout={this.logout} />
-              }
-            />
+            <React.Fragment>
+              <Route
+                path="/*"
+                element={
+                  <Navigate to="/Game"/>
+                }
+              />
+              <Route
+                path="/Game"
+                element={
+                  <Game token={this.state.access_token} logout={this.logout} />
+                }
+              />
+            </React.Fragment>
           )}
         </Routes>
       </div>
