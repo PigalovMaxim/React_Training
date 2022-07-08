@@ -3,10 +3,6 @@ import { Link } from 'react-router-dom';
 import s from './UnloginPage.module.css';
 
 class UnloginPage extends Component {
-  constructor() {
-    super();
-
-  }
   render() {
     return (
       <div className={s.wrapper}>
