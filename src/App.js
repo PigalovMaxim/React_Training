@@ -15,6 +15,7 @@ class App extends Component {
     };
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
+    this.history = props.history;
   }
   login(access_token) {
     localStorage.setItem("isUserLogin", true);
@@ -41,7 +42,7 @@ class App extends Component {
           {!this.state.isUserLogin ? (
             <React.Fragment>
               <Route path="/*" element={<UnloginPage />} />
-              <Route path="/Form" element={<UserForm login={this.login} />} />
+              <Route path="/Form" element={<UserForm history={this.history} login={this.login} />} />
             </React.Fragment>
           ) : (
             <React.Fragment>

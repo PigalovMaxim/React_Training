@@ -12,6 +12,7 @@ class UserForm extends Component {
       classnames: cn(s.message, s.hidden),
       errortext: ''
     };
+    this.history = props.history;
     this.loginEmail = React.createRef();
     this.loginPassword = React.createRef();
     this.registerEmail = React.createRef();
@@ -35,7 +36,7 @@ class UserForm extends Component {
     this.login(result.data.access_token);
     localStorage.setItem('isUserLogin', true);
     localStorage.setItem('access_token', result.data.access_token);
-    window.location.assign('http://localhost:3000/Game');
+    this.history.push('/Game');
   }
   async registrationSubmitHandler(e) {
     e.preventDefault();
