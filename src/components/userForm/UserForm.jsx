@@ -3,6 +3,15 @@ import cn from 'clsx';
 import { login, registration } from "../../other/requests";
 import s from "./UserForm.module.css";
 
+const INPUTS = {
+  logEmail: 'loginEmailValue',
+  logPass: 'loginPasswordValue',
+  regEmail: 'registerEmailValue',
+  regName: 'registerNameValue',
+  regPass: 'registerPasswordValue',
+  regPassConf: 'registerPasswordConfirmationValue'
+}
+
 class UserForm extends Component {
   constructor(props) {
     super(props);
@@ -10,18 +19,48 @@ class UserForm extends Component {
     this.state = {
       isLoginForm: false,
       classnames: cn(s.message, s.hidden),
-      errortext: ''
+      errortext: '',
+      loginEmailValue: '',
+      loginPasswordValue: '',
+      registerEmailValue: '',
+      registerNameValue: '',
+      registerPasswordValue: '',
+      registerPasswordConfirmationValue: '',
     };
     this.history = props.history;
-    this.loginEmail = React.createRef();
-    this.loginPassword = React.createRef();
-    this.registerEmail = React.createRef();
-    this.registerName = React.createRef();
-    this.registerPassword = React.createRef();
-    this.registerPasswordConfirmation = React.createRef();
+
     this.changeFormClickHandler = this.changeFormClickHandler.bind(this);
     this.registrationSubmitHandler = this.registrationSubmitHandler.bind(this);
     this.showMessageBox = this.showMessageBox.bind(this);
+  }
+  onChangeinputData(event, changeElement) {
+    const newValue = event.target.value;
+    switch(changeElement) {
+      case INPUTS.logEmail: {
+        this.setState({ loginEmailValue: newValue });
+        break;
+      }
+      case INPUTS.logPass: {
+        this.setState({ loginPasswordValue: newValue });
+        break;
+      }
+      case INPUTS.regEmail: {
+        this.setState({ registerEmailValue: newValue });
+        break;
+      }
+      case INPUTS.regName: {
+        this.setState({ registerNameValue: newValue });
+        break;
+      }
+      case INPUTS.regPass: {
+        this.setState({ registerPasswordValue: newValue });
+        break;
+      }
+      default: {
+        this.setState({ registerPasswordConfirmationValue: newValue });
+        break;
+      }
+    }
   }
   async loginSubmitHandler(e) {
     e.preventDefault();
@@ -87,18 +126,18 @@ class UserForm extends Component {
         {this.state.isLoginForm ? (
           <form onSubmit={(e) => this.loginSubmitHandler(e)}>
             <label className={s.title}>Авторизация</label>
-            <input ref={this.loginEmail} placeholder="Email" />
-            <input ref={this.loginPassword} placeholder="Password" />
+            <input onChange={e => this.onChangeinputData(e, INPUTS.logEmail)} placeholder="Email" />
+            <input onChange={e => this.onChangeinputData(e, INPUTS.logPass)} placeholder="Password" />
             <button>Авторизоваться</button>
           </form>
         ) : (
           <form onSubmit={(e) => this.registrationSubmitHandler(e)}>
             <label className={s.title}>Регистрация</label>
-            <input ref={this.registerEmail} placeholder="Email" />
-            <input ref={this.registerName} placeholder="Name" />
-            <input ref={this.registerPassword} placeholder="Password" />
+            <input onChange={e => this.onChangeinputData(e, INPUTS.regEmail)} placeholder="Email" />
+            <input onChange={e => this.onChangeinputData(e, INPUTS.regName)} placeholder="Name" />
+            <input onChange={e => this.onChangeinputData(e, INPUTS.regPass)} placeholder="Password" />
             <input
-              ref={this.registerPasswordConfirmation}
+              onChange={e => this.onChangeinputData(e, INPUTS.regPassConf)}
               placeholder="Confirm Password"
             />
             <button>Зарегистрироваться</button>
