@@ -28,7 +28,8 @@ class UserForm extends Component {
       registerPasswordConfirmationValue: '',
     };
     this.history = props.history;
-
+    this.loginEmail = React.createRef();
+    this.loginPass = React.createRef();
     this.changeFormClickHandler = this.changeFormClickHandler.bind(this);
     this.registrationSubmitHandler = this.registrationSubmitHandler.bind(this);
     this.showMessageBox = this.showMessageBox.bind(this);
@@ -64,8 +65,8 @@ class UserForm extends Component {
   }
   async loginSubmitHandler(e) {
     e.preventDefault();
-    const result = await login(this.loginEmail.current.value,
-      this.loginPassword.current.value);
+    const result = await login(this.state.loginEmailValue,
+      this.state.loginPasswordValue);
     if(result.status_code === 500) this.showMessageBox('Такого пользователя не существует');
     if(result.status_code === 422) {
       const error = this.makeErrorsStr(result.errors);
@@ -80,13 +81,15 @@ class UserForm extends Component {
   async registrationSubmitHandler(e) {
     e.preventDefault();
     const result = await registration(
-      this.registerEmail.current.value,
-      this.registerName.current.value,
-      this.registerPassword.current.value,
-      this.registerPasswordConfirmation.current.value
+      this.state.registerEmailValue,
+      this.state.registerNameValue,
+      this.state.registerPasswordValue,
+      this.state.registerPasswordConfirmationValue
     );
     if(!result) this.showMessageBox('Все поля должны быть заполнены!');
-    if(result && result.status) this.setState({isLoginForm: true});
+    if(result && result.status) {
+      this.setState({isLoginForm: true, loginEmailValue: this.state.registerEmailValue, loginPasswordValue: this.state.registerPasswordValue});
+    }
     if(result && !result.status) {
        const error = this.makeErrorsStr(result.errors);
        this.showMessageBox(error);
@@ -136,7 +139,7 @@ class UserForm extends Component {
             <input onChange={e => this.onChangeinputData(e, INPUTS.regEmail)} placeholder="Email" />
             <input onChange={e => this.onChangeinputData(e, INPUTS.regName)} placeholder="Name" />
             <input onChange={e => this.onChangeinputData(e, INPUTS.regPass)} placeholder="Password" />
-            <input
+            <input 
               onChange={e => this.onChangeinputData(e, INPUTS.regPassConf)}
               placeholder="Confirm Password"
             />
